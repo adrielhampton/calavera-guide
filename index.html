@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Guide — Lake Calavera Preserve</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#4a6741;--sage-light:#e8efe8;--sage-dark:#2f4a2c;
+  --sand:#c8b89a;--sand-light:#f7f3ec;
+  --amber:#b87720;--amber-light:#fdf4e3;
+  --red:#922;--red-light:#fdf0f0;
+  --text:#222;--muted:#666;--border:#e0d8cc;--bg:#f8f5f0;--white:#fefefe;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px}
+a{color:inherit}
+
+/* HEADER */
+header{background:var(--sage-dark);color:var(--white);padding:1.25rem 1rem 0.9rem}
+.hdr-top{display:flex;gap:10px;align-items:flex-start;margin-bottom:.9rem}
+.leaf{width:34px;height:34px;flex-shrink:0;margin-top:2px;opacity:.85}
+h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:500;line-height:1.25;color:var(--white)}
+.hdr-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;font-weight:300}
+.intro{font-size:13px;line-height:1.6;color:rgba(255,255,255,.82);border-top:1px solid rgba(255,255,255,.15);padding-top:.75rem;margin-bottom:.75rem}
+.intro a{color:rgba(255,255,255,.9);text-underline-offset:2px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.65);border-top:1px solid rgba(255,255,255,.12);padding-top:.6rem}
+.stats strong{color:var(--white);font-weight:500}
+
+/* SEARCH */
+.search-wrap{background:var(--white);border-bottom:1px solid var(--border);padding:.6rem 1rem}
+#search{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);outline:none}
+#search:focus{border-color:var(--sage)}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:.55rem 1rem;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:50}
+nav::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;font-size:12px;font-weight:400;padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.tab:hover{border-color:var(--sage);color:var(--sage-dark)}
+.tab.active{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--white);font-weight:500}
+
+/* GRID */
+.grid{padding:.9rem 1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px;max-width:960px;margin:0 auto}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .12s}
+.card:hover{box-shadow:0 2px 14px rgba(0,0,0,.08)}
+.card.gap{border-color:var(--sand)}
+.card.sensitive-card{border-color:#d4b0b0}
+.photo{width:100%;height:115px;background:var(--sand-light);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .ph{font-size:11px;color:var(--muted);text-align:center;padding:10px;line-height:1.5}
+.badge-comm{position:absolute;bottom:6px;left:6px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;background:var(--amber-light);color:var(--amber)}
+.badge-status{position:absolute;top:6px;right:6px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px}
+.badge-rare{background:#fde8e8;color:#922}
+.badge-sensitive{background:var(--amber-light);color:var(--amber)}
+.badge-venomous{background:#fde8e8;color:#922}
+.badge-caution{background:var(--amber-light);color:var(--amber)}
+.card-body{padding:9px 11px 11px}
+.card-common{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
+.card-sci{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
+.card-note{font-size:11px;color:#555;margin-top:6px;line-height:1.5}
+.card-link{display:inline-block;margin-top:8px;font-size:11px;color:var(--sage-dark);text-decoration:none;border:1px solid var(--sage);padding:3px 10px;border-radius:10px;transition:all .12s}
+.card-link:hover{background:var(--sage-dark);color:var(--white)}
+
+/* INAT PROMO */
+.promo{max-width:960px;margin:1rem auto;padding:0 1rem}
+.promo-inner{background:var(--sage-dark);color:var(--white);border-radius:14px;padding:1.25rem 1.25rem 1.1rem}
+.promo-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;margin-bottom:.4rem}
+.promo-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:.9rem}
+.promo-btns{display:flex;gap:8px;flex-wrap:wrap}
+.promo-btn{font-size:12px;font-weight:500;padding:7px 14px;border-radius:8px;text-decoration:none;background:rgba(255,255,255,.15);color:var(--white);border:1px solid rgba(255,255,255,.25);font-family:'DM Sans',sans-serif}
+.promo-btn:hover{background:rgba(255,255,255,.25)}
+
+/* FOOTER */
+footer{text-align:center;padding:1.75rem 1rem 2rem;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:.5rem;line-height:1.8}
+footer a{color:var(--sage-dark)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-top">
+    <svg class="leaf" viewBox="0 0 34 34" fill="none">
+      <path d="M17 4C17 4 6 11 6 21c0 5.8 4.8 9.5 11 9.5S28 26.8 28 21C28 11 17 4 17 4Z" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.6)" stroke-width="1.2"/>
+      <line x1="17" y1="30" x2="17" y2="12" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+      <line x1="17" y1="19" x2="22" y2="14" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+      <line x1="17" y1="23" x2="12" y2="18" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+    </svg>
+    <div>
+      <h1>Field Guide to Lake Calavera Preserve</h1>
+      <div class="hdr-sub">Native species of Carlsbad's largest open space</div>
+    </div>
+  </div>
+  <p class="intro">
+    Lake Calavera Preserve is one of Carlsbad's largest natural open spaces and home to iconic California coastal sage scrub habitat. A year-round joy — use this guide as you appreciate the preserve's native plants, the music of bird calls, and share the trail with local coyote, roadrunners, and much more.<br><br>
+    Tap any species card to explore hundreds of photos and observations from naturalists like you on <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a>. See something? <a href="https://www.inaturalist.org/pages/seek_app" target="_blank">Log it yourself!</a>
+  </p>
+  <div class="stats" id="stats"><span>Loading species data…</span></div>
+</header>
+
+<div class="search-wrap">
+  <input type="search" id="search" placeholder="Search by common or scientific name…" oninput="onSearch(this.value)" autocomplete="off">
+</div>
+
+<nav id="tabnav">
+  <button class="tab active" onclick="setTab('all',this)">All</button>
+  <button class="tab" onclick="setTab('css',this)">Sage Scrub</button>
+  <button class="tab" onclick="setTab('chap',this)">Chaparral</button>
+  <button class="tab" onclick="setTab('rip',this)">Riparian</button>
+  <button class="tab" onclick="setTab('wild',this)">Wildflowers</button>
+  <button class="tab" onclick="setTab('bird',this)">Birds</button>
+  <button class="tab" onclick="setTab('herp',this)">Reptiles &amp; Amphibians</button>
+  <button class="tab" onclick="setTab('mammal',this)">Mammals</button>
+  <button class="tab" onclick="setTab('insect',this)">Insects</button>
+</nav>
+
+<div class="grid" id="grid"></div>
+
+<div class="promo">
+  <div class="promo-inner">
+    <div class="promo-title">See something? Log it on iNaturalist!</div>
+    <div class="promo-text">iNaturalist is a free app that helps you identify plants, birds, insects, and more — and every observation contributes to real biodiversity science. The photos in this guide come from the iNaturalist community. Join us!</div>
+    <div class="promo-btns">
+      <a class="promo-btn" href="https://apps.apple.com/us/app/inaturalist/id421397028" target="_blank">Download for iPhone</a>
+      <a class="promo-btn" href="https://play.google.com/store/apps/details?id=org.inaturalist.android" target="_blank">Download for Android</a>
+      <a class="promo-btn" href="https://www.inaturalist.org/observations?place_id=4647" target="_blank">View all Calavera observations</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Native species based on <a href="http://preservecalavera.org/wp-content/uploads/2017/03/Plant-list-J-Dillane-3-2017.pdf" target="_blank">James Dillane's 2017 plant survey</a> of Lake Calavera &amp; Calavera Heights Preserves.<br>
+  A California Naturalist Stewardship Project by Adriel Hampton, Spring 2026 · Sponsored by <a href="https://www.preservecalavera.org" target="_blank">Preserve Calavera</a><br>
+  Photos from <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> contributors under Creative Commons license.<br>
+  Interested in becoming a California Naturalist? <a href="https://www.preservecalavera.org/?page_id=1358" target="_blank">Learn about the certification course</a> offered through Preserve Calavera.
+</footer>
+
+<script>
+const BASE = 'https://api.inaturalist.org/v1';
+const PLACE = 4647;
+
+// Hardcoded observation IDs (Adriel's photos)
+const OBS_IDS = {
+  'Salvia apiana':343993393,
+  'Salvia mellifera':342327602,
+  'Eriogonum fasciculatum':343323661,
+  'Malosma laurina':343322554,
+  'Rhus integrifolia':346270156,
+  'Diplacus puniceus':341251323,
+  'Acmispon glaber':341251014,
+  'Xylococcus bicolor':342323690,
+  'Crocanthemum aldersonii':341251623,
+  'Pseudognaphalium microcephalum':343396492,
+  'Brickellia californica':343396680,
+  'Baccharis sarothroides':343323525,
+  'Adenostoma fasciculatum':341250701,
+  'Heteromeles arbutifolia':346270136,
+  'Quercus agrifolia':342589641,
+  'Ribes speciosum':342325235,
+  'Malacothamnus fasciculatus':343325587,
+  'Solanum parishii':342327324,
+  'Cleomella arborea':342589289,
+  'Pholistoma auritum':342327072,
+  'Eucrypta chrysanthemifolia':343325491,
+  'Lathyrus vestitus':342323014,
+  'Salix lasiolepis':341253493,
+  'Toxicodendron diversilobum':342588198,
+  'Marah macrocarpa':341255470,
+  'Baccharis salicifolia':343322442,
+  'Rubus ursinus':341253726,
+  'Eschscholzia californica':343326731,
+  'Dipterostemon capitatus':342326696,
+  'Dudleya pulverulenta':346269376,
+  'Castilleja exserta':342323526,
+  'Ardea herodias':345486242,
+  'Butorides virescens':343645981,
+  'Buteo lineatus':346274256,
+  'Nannopterum auritum':343991604,
+  'Aphelocoma californica':342593039,
+  'Sceloporus occidentalis':346265842,
+  'Lampropeltis californiae':346264949,
+  'Bombus vosnesenskii':341251857,
+  'Dasymutilla californica':346273371,
+  'Eleodes osculans':340878745,
+};
+
+const SPECIES = [
+  // COASTAL SAGE SCRUB
+  {common:'California sagebrush',sci:'Artemisia californica',hab:'css',note:'Aromatic gray-green shrub on open, sunny slopes throughout the preserve. Rub a leaf gently to release the unmistakable scent of coastal California.'},
+  {common:'White sage',sci:'Salvia apiana',hab:'css',note:'Striking silvery-white foliage on dry hillsides. Sacred to many Indigenous peoples; watch for bees and hummingbirds visiting its tall flower spikes in spring.'},
+  {common:'Black sage',sci:'Salvia mellifera',hab:'css',note:'Dark, strongly aromatic leaves on dry sunny slopes. Round seed heads persist into summer and feed finches and other seed-eating birds.'},
+  {common:'California buckwheat',sci:'Eriogonum fasciculatum',hab:'css',note:'Low-spreading shrub with cream-to-rust flower clusters. One of the most important plants for native bees, butterflies, and other pollinators.'},
+  {common:'Laurel sumac',sci:'Malosma laurina',hab:'css',note:'Large, aromatic shrub with folded leaves forming a distinctive V-shape. Common on coastal-facing slopes; berries eaten by birds in fall.'},
+  {common:'Lemonadeberry',sci:'Rhus integrifolia',hab:'css',note:'Shiny leaves and sticky red berries on chaparral-edge slopes. Berries were used by Indigenous peoples to make a tart, lemony drink.'},
+  {common:'Coyote brush',sci:'Baccharis pilularis',hab:'css',note:'One of the first plants to recolonize disturbed areas. Look for its white fluffy seed heads in fall along roadsides and trail margins.'},
+  {common:'Desert broom',sci:'Baccharis sarothroides',hab:'css',note:'Bright green, nearly leafless shrub with showy white fall blooms. Distinguished from coyote brush by its narrow, broom-like stems.'},
+  {common:'Red bush monkeyflower',sci:'Diplacus puniceus',hab:'css',note:'Brilliant brick-red flowers on shrubby stems from spring through summer. A hummingbird favorite — watch for Anna\'s hovering nearby.'},
+  {common:'Coast deerweed',sci:'Acmispon glaber',hab:'css',note:'Low, sprawling shrub with small yellow-to-orange pea flowers. An important early-season nectar source for native bees and small butterflies.'},
+  {common:'Mission manzanita',sci:'Xylococcus bicolor',hab:'css',note:'Dark, twisted branches with urn-shaped pink flowers in winter. Look for it on rocky outcrops and steep, dry slopes.'},
+  {common:'Adolphia',sci:'Adolphia californica',hab:'css',status:'sensitive',note:'Rare, thorny native shrub found on coastal scrub margins. Use caution — thorns are sharp. A CNPS Species of Special Concern.'},
+  {common:'Alderson\'s rushrose',sci:'Crocanthemum aldersonii',hab:'css',note:'Tiny yellow flowers on low, mat-forming stems in open rocky areas. Easy to miss — look down on sunny, sandy slopes in early spring.'},
+  {common:'Feltleaf everlasting',sci:'Pseudognaphalium microcephalum',hab:'css',note:'White woolly leaves and small yellow flower heads on dry disturbed slopes. One of the most abundant composites in the preserve.'},
+  {common:'Two-color rabbit tobacco',sci:'Pseudognaphalium biolettii',hab:'css',note:'Grayish-green everlasting with leaves that are white-woolly above and green below. Common on chaparral slopes and trail margins.'},
+  {common:'California brickellbush',sci:'Brickellia californica',hab:'css',note:'Resinous shrub with small cream flower heads found in rocky areas and chaparral margins. Often overlooked but worth seeking out.'},
+
+  // CHAPARRAL
+  {common:'Chamise',sci:'Adenostoma fasciculatum',hab:'chap',note:'The dominant shrub on hot, dry, rocky slopes throughout the preserve. Its dense thickets provide essential cover for birds and small mammals.'},
+  {common:'Toyon',sci:'Heteromeles arbutifolia',hab:'chap',note:'California\'s native \'Hollywood\' shrub — clusters of bright red berries in winter feed robins and waxwings. Beautiful year-round.'},
+  {common:'Holly-leaf cherry',sci:'Prunus ilicifolia',hab:'chap',note:'Spiny, holly-like leaves and dark purple cherries in summer. A keystone chaparral shrub providing food and shelter for many species.'},
+  {common:'Coast live oak',sci:'Quercus agrifolia',hab:'chap',note:'Ancient, spreading oaks anchor the canyon bottoms. A single oak can support hundreds of insect species and the birds that feed on them.'},
+  {common:'Fuchsia-flowered gooseberry',sci:'Ribes speciosum',hab:'chap',note:'Striking dangling red flowers in late winter make this one of the earliest blooming shrubs. Watch for hummingbirds feeding in February.'},
+  {common:'California peony',sci:'Paeonia californica',hab:'chap',note:'Dark burgundy flowers on lush, divided foliage in early spring. Found in shaded chaparral — a real treat to find in bloom.'},
+  {common:'Chaparral bushmallow',sci:'Malacothamnus fasciculatus',hab:'chap',note:'Tall, soft-leaved shrub with pink hollyhock-like flowers. Found in chaparral openings and along streams.'},
+  {common:'Chaparral prickly-pear',sci:'Opuntia oricola',hab:'chap',note:'Flat-padded cactus on dry, rocky slopes. Yellow flowers in spring become deep red fruits eaten by coyotes and birds.'},
+  {common:'Parish\'s nightshade',sci:'Solanum parishii',hab:'chap',note:'Purple star-shaped flowers on woody stems in chaparral openings. Native and non-toxic, unlike some of its introduced relatives.'},
+  {common:'Bladderpod',sci:'Cleomella arborea',hab:'chap',note:'Airy shrub with yellow flowers and distinctive inflated seed pods. Found on dry coastal sage scrub and chaparral margins.'},
+  {common:'Fiesta flower',sci:'Pholistoma auritum',hab:'chap',note:'Delicate purple flowers on scrambling stems through oak woodland and chaparral understory in spring. Leaves have tiny hooks that cling to clothing.'},
+  {common:'Common eucrypta',sci:'Eucrypta chrysanthemifolia',hab:'chap',note:'Small white flowers on lacy-leaved stems in winter and early spring. Common in shaded rock outcrops and chaparral understory.'},
+  {common:'Pacific pea',sci:'Lathyrus vestitus',hab:'chap',note:'Climbing vine with white-to-lilac pea flowers on chaparral margins in spring. Clings to surrounding shrubs with delicate tendrils.'},
+
+  // RIPARIAN
+  {common:'Western sycamore',sci:'Platanus racemosa',hab:'rip',note:'California\'s largest native riparian tree, with distinctive mottled bark. Its size signals water below — look for it along the canyon bottom.'},
+  {common:'Blue elderberry',sci:'Sambucus nigra',hab:'rip',note:'Flat-topped clusters of tiny white flowers in spring; dark blue berries in summer feed over 50 bird species. A wildlife magnet.'},
+  {common:'Arroyo willow',sci:'Salix lasiolepis',hab:'rip',note:'Narrow-leaved willow along the streambed. One of the first plants to signal water — look for its gray-green foliage in the canyon below.'},
+  {common:'Wild rose',sci:'Rosa californica',hab:'rip',note:'California\'s native rose with pink flowers in late spring. Thorny stems provide protected nesting sites; orange rose hips persist through winter.'},
+  {common:'Poison oak',sci:'Toxicodendron diversilobum',hab:'rip',status:'caution',note:'Three-leaflet leaves that turn brilliant red in fall. Produces urushiol oil that causes an itchy rash on contact — admire from a distance!'},
+  {common:'Wild cucumber',sci:'Marah macrocarpa',hab:'rip',note:'Vigorous vine that scrambles over shrubs in riparian areas. White flowers in late winter; large, spiny seed pods follow in spring.'},
+  {common:'Mulefat',sci:'Baccharis salicifolia',hab:'rip',note:'Dense, fast-growing shrub along stream margins. Provides year-round cover for birds and small mammals; look for it wherever ground stays moist.'},
+  {common:'Trailing blackberry',sci:'Rubus ursinus',hab:'rip',note:'California\'s native blackberry — smaller than its introduced cousins. Fruits ripen in summer; thorny tangles provide excellent bird nesting cover.'},
+
+  // WILDFLOWERS
+  {common:'California poppy',sci:'Eschscholzia californica',hab:'wild',note:'California\'s state flower — golden-orange cups open in sunshine and close at night. Can carpet entire hillsides after generous winter rains.'},
+  {common:'Blue dicks',sci:'Dipterostemon capitatus',hab:'wild',note:'Slender stems topped with clusters of purple-blue flowers, appearing March through May. Look for them on open grassy slopes.'},
+  {common:'Splendid mariposa lily',sci:'Calochortus splendens',hab:'wild',note:'Large, lavender tulip-like flowers on slender stems in late spring. One of the most elegant wildflowers in the preserve.'},
+  {common:'Checker bloom',sci:'Sidalcea sparsifolia',hab:'wild',note:'Cheerful pink hollyhock-like flowers on tall spikes in spring. Uncommon — a real find when you spot it in chaparral clearings.'},
+  {common:'Golden-rayed pentachaeta',sci:'Pentachaeta aurea',hab:'wild',status:'rare',note:'Tiny daisy with golden rays on bare clay soils. Rare — a CNPS Species of Special Concern. Please observe from the trail and do not disturb.'},
+  {common:'Blue-eyed grass',sci:'Sisyrinchium bellum',hab:'wild',note:'Not a true grass — a member of the iris family. Look for tiny violet-blue flowers with yellow centers in moist grassland areas.'},
+  {common:'Branching phacelia',sci:'Phacelia ramosissima',hab:'wild',note:'Clusters of purple-blue flowers on sprawling stems in late spring. Common in chaparral after disturbance; an important native bee plant.'},
+  {common:'Chalk dudleya',sci:'Dudleya pulverulenta',hab:'wild',note:'Rosettes of chalky-white succulent leaves on rocky outcrops and cliff faces. Brilliant red flower stalks emerge in late spring.'},
+  {common:'Purple owl\'s-clover',sci:'Castilleja exserta',hab:'wild',note:'Brilliant magenta-tipped flower heads covering grassy slopes in spring. Not a true clover — it\'s a hemiparasite that taps into grass roots for nutrients.'},
+
+  // BIRDS
+  {common:'Great Blue Heron',sci:'Ardea herodias',hab:'bird',note:'North America\'s largest heron, standing over 4 feet tall. Watch for it stalking fish and frogs along the lake shore with prehistoric patience.'},
+  {common:'Green Heron',sci:'Butorides virescens',hab:'bird',note:'Small, secretive heron in dense riparian vegetation. One of the few birds known to use tools — it drops bait to lure fish to the surface.'},
+  {common:'Red-shouldered Hawk',sci:'Buteo lineatus',hab:'bird',note:'Listen for its distinctive \'kee-aah\' call echoing through the canyon. A resident raptor that hunts small mammals, lizards, and large insects.'},
+  {common:'Osprey',sci:'Pandion haliaetus',hab:'bird',note:'Expert fisher — watch for it hovering high over the lake before diving feet-first for fish. Sometimes perched on snags near the water.'},
+  {common:'Double-crested Cormorant',sci:'Nannopterum auritum',hab:'bird',note:'Large, dark waterbird often seen drying its wings on lakeside perches with wings spread. Plunges underwater to catch fish with surprising speed.'},
+  {common:'California Scrub-Jay',sci:'Aphelocoma californica',hab:'bird',note:'Bold, bright blue jay common throughout the preserve. Remarkably intelligent — it caches thousands of acorns and remembers where it hid each one.'},
+  {common:'California Quail',sci:'Callipepla californica',hab:'bird',note:'California\'s state bird, often seen in coveys scurrying along the trail. Listen for its distinctive \'chi-CA-go\' call from dense shrubs.'},
+  {common:'Wrentit',sci:'Chamaea fasciata',hab:'bird',note:'The voice of the chaparral — its bouncing-ball call is heard far more often than the bird is seen. Pairs mate for life and rarely leave their home territory.'},
+  {common:'Anna\'s Hummingbird',sci:'Calypte anna',hab:'bird',note:'The only year-round hummingbird in coastal California. Males display iridescent rose-pink gorgets and perform dramatic diving courtship flights.'},
+  {common:'Black Phoebe',sci:'Sayornis nigricans',hab:'bird',note:'Small, tuxedo-colored flycatcher almost always found near water. Pumps its tail continuously while perched on low branches or rocks.'},
+  {common:'Red-winged Blackbird',sci:'Agelaius phoeniceus',hab:'bird',note:'Males flash brilliant red-and-yellow shoulder patches from cattails and tall shrubs. Their gurgling \'konk-la-ree\' is the sound of the marsh.'},
+  {common:'Greater Roadrunner',sci:'Geococcyx californianus',hab:'bird',note:'A Calavera celebrity — fast, fearless, and surprising. A member of the cuckoo family that prefers running to flying. Eats lizards, snakes, and large insects.'},
+  {common:'Great-tailed Grackle',sci:'Quiscalus mexicanus',hab:'bird',note:'Iridescent black males with long, keel-shaped tails are hard to miss. Listen for their remarkable cacophony of squeaks, rattles, and whistles.'},
+  {common:'Barn Owl',sci:'Tyto furcata',hab:'bird',note:'Ghost-white underparts and a heart-shaped face. A nocturnal hunter of extraordinary precision — it can catch prey in total darkness by sound alone.'},
+  {common:'Black-crowned Night Heron',sci:'Nycticorax nycticorax',hab:'bird',note:'Stocky heron active at dusk and dawn. Watch for it perched hunched in shoreline vegetation at the lake\'s edge in low light.'},
+  {common:'Common Yellowthroat',sci:'Geothlypis trichas',hab:'bird',note:'Small warbler of dense riparian tangles. Males wear a bold black mask; listen for their insistent \'witchety-witchety-witchety\' song near water.'},
+  {common:'Yellow-rumped Warbler',sci:'Setophaga coronata',hab:'bird',note:'Common winter visitor, flashing its distinctive yellow rump patch in flight through oak woodland and chaparral edges. One of California\'s most abundant warblers.'},
+  {common:'Song Sparrow',sci:'Melospiza melodia',hab:'bird',note:'Year-round resident in dense shrubs near water. One of California\'s most studied birds — a rich, varied singer with a distinctive breast spot.'},
+
+  // REPTILES & AMPHIBIANS
+  {common:'Western Fence Lizard',sci:'Sceloporus occidentalis',hab:'herp',note:'Perhaps the most-seen reptile in the preserve. Males do push-up displays showing iridescent blue bellies. They host ticks that actually reduce Lyme disease bacteria.'},
+  {common:'California Kingsnake',sci:'Lampropeltis californiae',hab:'herp',note:'Beautiful banded snake, non-venomous and harmless to humans. Feeds on rattlesnakes, rodents, and lizards — a vital part of the ecosystem.'},
+  {common:'Southern Alligator Lizard',sci:'Elgaria multicarinata',hab:'herp',note:'Long-tailed, slow-moving lizard with a distinctive bite. Often found in denser vegetation than fence lizards — look near logs and rocks in the canyon.'},
+  {common:'Western Rattlesnake',sci:'Crotalus oreganus',hab:'herp',status:'venomous',note:'Venomous — give it space and it will give you space. Look before stepping off-trail and listen for the rattle. A vital predator of rodents.'},
+  {common:'Orange-throated Whiptail',sci:'Aspidoscelis hyperythra',hab:'herp',status:'sensitive',note:'Fast, slender lizard with a long blue tail. Males display a brilliant orange throat. Active in warm sun on open ground — a California Species of Special Concern.'},
+  {common:'Pacific Tree Frog',sci:'Pseudacris regilla',hab:'herp',note:'California\'s most common frog — the \'ribbit\' of movie soundtracks actually comes from this species. Listen for choruses near standing water in spring.'},
+
+  // MAMMALS
+  {common:'Coyote',sci:'Canis latrans',hab:'mammal',note:'Adaptable, intelligent, and thriving. More often heard (a haunting evening chorus) than seen. A keystone predator that keeps rodent populations in check.'},
+  {common:'Brush Rabbit',sci:'Sylvilagus bachmani',hab:'mammal',note:'Small, dark native rabbit of dense chaparral. Smaller and shyer than the non-native cottontail — look for it near thick shrubs at dawn and dusk.'},
+  {common:'California Ground Squirrel',sci:'Otospermophilus beecheyi',hab:'mammal',note:'The preserve\'s most visible mammal. Despite their abundance, they\'re a critical food source for hawks, foxes, and rattlesnakes.'},
+  {common:'Mule Deer',sci:'Odocoileus hemionus',hab:'mammal',note:'Large ears give this deer its name. Visitors occasionally spot them browsing on chaparral shrubs at dawn or dusk along the quieter trails.'},
+  {common:'Bobcat',sci:'Lynx rufus',hab:'mammal',note:'Present but rarely seen — count yourself very lucky for a sighting. Footprints in mud near the creek are a more common sign of their presence.'},
+  {common:'Striped Skunk',sci:'Mephitis mephitis',hab:'mammal',note:'Mostly nocturnal — you\'re more likely to smell evidence than see one. An important insect and rodent predator in riparian and chaparral areas.'},
+
+  // INSECTS
+  {common:'Yellow-faced Bumble Bee',sci:'Bombus vosnesenskii',hab:'insect',note:'One of California\'s most common native bumble bees and a critical pollinator. Watch for them working sage and phacelia flowers in spring.'},
+  {common:'California Velvet Ant',sci:'Dasymutilla californica',hab:'insect',status:'caution',note:'Actually a wingless female wasp — despite looking like an ant. Its sting is legendarily painful; admire from a distance. Males have wings and don\'t sting.'},
+  {common:'Woolly Darkling Beetle',sci:'Eleodes osculans',hab:'insect',note:'Large, slow-moving black beetle found on open trails and sunny slopes. Raises its rear when threatened. A fascinating and harmless chaparral species.'},
+];
+
+// State
+let currentTab = 'all';
+let searchQuery = '';
+const taxonIdCache = {};
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function spKey(name) {
+  return name ? name.toLowerCase().split(' ').slice(0,2).join(' ') : '';
+}
+
+function pickBestPhoto(photos) {
+  if (!photos || !photos.length) return null;
+  return photos.reduce((best, p) => {
+    const score = ph => {
+      const d = ph.original_dimensions;
+      if (!d) return 999;
+      return Math.abs(d.width / d.height - 1);
+    };
+    return score(p) < score(best) ? p : best;
+  });
+}
+
+function photoUrl(photo) {
+  if (!photo) return null;
+  return photo.url.replace(/\/(square|small)\./, '/medium.');
+}
+
+function makeCard(sp) {
+  const k = sp.sci.replace(/[ .]/g,'_');
+  const div = document.createElement('div');
+  div.className = 'card gap';
+  if (sp.status === 'rare' || sp.status === 'venomous') div.classList.add('sensitive-card');
+  div.dataset.hab = sp.hab;
+  div.dataset.common = sp.common.toLowerCase();
+  div.dataset.sci = sp.sci.toLowerCase();
+
+  const statusBadge = sp.status ? `<span class="badge-status badge-${sp.status}">${
+    sp.status === 'rare' ? 'Rare' :
+    sp.status === 'sensitive' ? 'Watch List' :
+    sp.status === 'venomous' ? 'Venomous' :
+    sp.status === 'caution' ? 'Caution' : ''
+  }</span>` : '';
+
+  div.innerHTML = `
+    <div class="photo" id="p_${k}"><div class="ph">Loading…</div></div>
+    <div class="card-body">
+      <div class="card-common">${sp.common}</div>
+      <div class="card-sci">${sp.sci}</div>
+      <div class="card-note">${sp.note}</div>
+      <div id="l_${k}"></div>
+    </div>`;
+
+  // inject status badge after photo renders
+  div.dataset.statusBadge = statusBadge;
+  return div;
+}
+
+function setPhoto(sp, imgUrl, linkUrl, isYours, taxonId) {
+  const k = sp.sci.replace(/[ .]/g,'_');
+  const p = document.getElementById('p_' + k);
+  const l = document.getElementById('l_' + k);
+  if (!p) return;
+
+  const communityBadge = !isYours ? '<span class="badge-comm">Community photo</span>' : '';
+  const statusBadge = p.closest('.card').dataset.statusBadge || '';
+
+  p.innerHTML = `<img src="${imgUrl}" alt="${sp.common}" loading="lazy">${communityBadge}${statusBadge}`;
+
+  // Link to preserve-filtered observations if we have taxon ID, else taxon page
+  const obsLink = taxonId
+    ? `https://www.inaturalist.org/observations?place_id=${PLACE}&taxon_id=${taxonId}&order_by=votes`
+    : linkUrl;
+
+  l.innerHTML = `<a class="card-link" href="${obsLink}" target="_blank">See all observations ↗</a>`;
+  if (isYours) p.closest('.card').classList.remove('gap');
+}
+
+function setNoPhoto(sp, taxonId) {
+  const k = sp.sci.replace(/[ .]/g,'_');
+  const p = document.getElementById('p_' + k);
+  const l = document.getElementById('l_' + k);
+  if (!p) return;
+  const statusBadge = p.closest('.card').dataset.statusBadge || '';
+  p.innerHTML = `<div class="ph">📷 No photo yet<br><span style="font-size:10px">Be the first to document this!</span></div>${statusBadge}`;
+  const url = taxonId ? `https://www.inaturalist.org/taxa/${taxonId}` : `https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(sp.sci)}`;
+  l.innerHTML = `<a class="card-link" href="${url}" target="_blank">View on iNaturalist ↗</a>`;
+}
+
+function setTab(hab, el) {
+  currentTab = hab;
+  searchQuery = '';
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilter();
+}
+
+function onSearch(q) {
+  searchQuery = q.toLowerCase().trim();
+  applyFilter();
+}
+
+function applyFilter() {
+  document.querySelectorAll('.card').forEach(c => {
+    let show;
+    if (searchQuery) {
+      show = c.dataset.common.includes(searchQuery) || c.dataset.sci.includes(searchQuery);
+    } else {
+      show = currentTab === 'all' || c.dataset.hab === currentTab;
+    }
+    c.style.display = show ? '' : 'none';
+  });
+}
+
+async function loadGuide() {
+  const grid = document.getElementById('grid');
+  SPECIES.forEach(sp => grid.appendChild(makeCard(sp)));
+
+  // 1. Batch fetch all hardcoded obs IDs in one call
+  const allIds = Object.values(OBS_IDS).join(',');
+  let obsById = {};
+  try {
+    const r = await fetch(`${BASE}/observations?id=${allIds}&per_page=200&photos=true`);
+    const d = await r.json();
+    for (const obs of (d.results || [])) obsById[obs.id] = obs;
+  } catch(e) {}
+
+  // 2. Resolve all hardcoded obs -> photo
+  const pending = [];
+  let yours = 0;
+
+  for (const sp of SPECIES) {
+    const obsId = OBS_IDS[sp.sci];
+    if (obsId && obsById[obsId]) {
+      const obs = obsById[obsId];
+      const photo = pickBestPhoto(obs.photos);
+      const url = photoUrl(photo);
+      if (url) {
+        const taxonId = obs.taxon ? obs.taxon.id : null;
+        if (taxonId) taxonIdCache[sp.sci] = taxonId;
+        setPhoto(sp, url, `https://www.inaturalist.org/observations/${obsId}`, true, taxonId);
+        yours++;
+      } else {
+        pending.push(sp);
+      }
+    } else if (!obsId) {
+      pending.push(sp);
+    } else {
+      pending.push(sp); // obs ID given but not found in batch
+    }
+  }
+
+  // 3. Update stats
+  const updateStats = (y, g, t, loaded) => {
+    document.getElementById('stats').innerHTML = `
+      <span><strong>${y}</strong> local photos</span>
+      <span><strong>${g}</strong> community photos</span>
+      <span><strong>${t}</strong> total species</span>
+      <span style="opacity:.6">${loaded} obs fetched</span>`;
+  };
+  updateStats(yours, 0, SPECIES.length, Object.keys(obsById).length);
+
+  // 4. Fetch community taxon photos for pending species in batches
+  let community = 0;
+  for (let i = 0; i < pending.length; i += 5) {
+    await Promise.all(pending.slice(i, i+5).map(async sp => {
+      try {
+        const r = await fetch(`${BASE}/taxa?q=${encodeURIComponent(sp.sci)}&per_page=1&rank=species`);
+        const d = await r.json();
+        const t = d.results && d.results[0];
+        if (t) {
+          taxonIdCache[sp.sci] = t.id;
+          if (t.default_photo) {
+            const img = t.default_photo.medium_url || t.default_photo.url;
+            setPhoto(sp, img, `https://www.inaturalist.org/taxa/${t.id}`, false, t.id);
+            community++;
+          } else {
+            setNoPhoto(sp, t.id);
+          }
+        } else {
+          setNoPhoto(sp, null);
+        }
+      } catch(e) { setNoPhoto(sp, null); }
+    }));
+    if (i + 5 < pending.length) await sleep(250);
+  }
+
+  updateStats(yours, community, SPECIES.length, Object.keys(obsById).length);
+}
+
+loadGuide();
+</script>
+</body>
+</html>
