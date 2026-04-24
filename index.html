@@ -16,7 +16,7 @@
 <meta property="og:url" content="https://lakecalavera.com">
 <meta property="og:title" content="Field Guide to Lake Calavera Preserve — Native Species of Carlsbad, CA">
 <meta property="og:description" content="A mobile-first field guide to native plants, birds, reptiles, mammals, and insects of Lake Calavera Preserve. Explore coastal sage scrub and chaparral species with photos from iNaturalist.">
-<meta property="og:image" content="https://lakecalavera.com/og-image.png">
+<meta property="og:image" content="https://inaturalist-open-data.s3.amazonaws.com/photos/628508386/large.jpg">
 <meta property="og:image:alt" content="Native plant at Lake Calavera Preserve, Carlsbad CA">
 <meta property="og:site_name" content="Lake Calavera Field Guide">
 <meta property="og:locale" content="en_US">
@@ -33,7 +33,7 @@
 <meta name="geo.position" content="33.1705;-117.2855">
 <meta name="ICBM" content="33.1705, -117.2855">
 
-<link href="https://fonts.goleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --sage:#4a6741;--sage-light:#e8efe8;--sage-dark:#2f4a2c;
@@ -89,6 +89,17 @@ nav::-webkit-scrollbar{display:none}
 .promo-btn:hover{background:rgba(255,255,255,.25)}
 footer{text-align:center;padding:1.75rem 1rem 2rem;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:.5rem;line-height:1.8}
 footer a{color:var(--sage-dark)}
+
+/* LIGHTBOX */
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:1rem}
+.lb-overlay.open{display:flex}
+.lb-img{max-width:100%;max-height:75vh;object-fit:contain;border-radius:8px;display:block}
+.lb-caption{margin-top:.75rem;text-align:center}
+.lb-common{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;color:#fff}
+.lb-sci{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.7);margin-top:3px}
+.lb-close{position:fixed;top:1rem;right:1rem;width:36px;height:36px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.lb-close:hover{background:rgba(255,255,255,.28)}
+.photo img{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -103,7 +114,7 @@ footer a{color:var(--sage-dark)}
     </svg>
     <div>
       <h1>Field Guide to Lake Calavera Preserve</h1>
-      <div class="hdr-sub">Carlsbad's premier natural open space for hiking and wildlife observation</div>
+      <div class="hdr-sub">Native species of Carlsbad's largest open space</div>
     </div>
   </div>
   <p class="intro">
@@ -149,6 +160,16 @@ footer a{color:var(--sage-dark)}
   Interested in becoming a California Naturalist? <a href="https://www.preservecalavera.org/?page_id=1358" target="_blank">Learn about the certification course</a> offered through Preserve Calavera.<br>
   Questions or feedback: <a href="mailto:lakecalavera@adrielhampton.com">lakecalavera@adrielhampton.com</a> · <a href="privacy.html">Privacy Policy</a>
 </footer>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lb" onclick="closeLightbox(event)">
+  <button class="lb-close" onclick="closeLightbox()">&times;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <div class="lb-caption">
+    <div class="lb-common" id="lb-common"></div>
+    <div class="lb-sci" id="lb-sci"></div>
+  </div>
+</div>
 
 <script>
 const BASE = 'https://api.inaturalist.org/v1';
@@ -361,6 +382,25 @@ function makeCard(sp) {
   return div;
 }
 
+// LIGHTBOX
+function openLightbox(imgSrc, common, sci) {
+  document.getElementById('lb-img').src = imgSrc;
+  document.getElementById('lb-common').textContent = common;
+  document.getElementById('lb-sci').textContent = sci;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lb') && !e.target.classList.contains('lb-close')) return;
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('lb').classList.remove('open'); document.body.style.overflow = ''; }
+});
+
 function setPhoto(sp, imgUrl, isYours, taxonId) {
   const k = sp.sci.replace(/[ .]/g,'_');
   const p = document.getElementById('p_' + k);
@@ -368,7 +408,10 @@ function setPhoto(sp, imgUrl, isYours, taxonId) {
   if (!p) return;
   const communityBadge = !isYours ? '<span class="badge-comm">Community photo</span>' : '';
   const statusBadge = p.closest('.card').dataset.statusBadge || '';
-  p.innerHTML = `<img src="${imgUrl}" alt="${sp.common}" loading="lazy">${communityBadge}${statusBadge}`;
+  const escapedUrl = imgUrl.replace(/'/g,"\\'");
+  const escapedCommon = sp.common.replace(/'/g,"\\'");
+  const escapedSci = sp.sci.replace(/'/g,"\\'");
+  p.innerHTML = `<img src="${imgUrl}" alt="${sp.common}" loading="lazy" onclick="openLightbox('${escapedUrl}','${escapedCommon}','${escapedSci}')">${communityBadge}${statusBadge}`;
   const href = taxonId ? obsUrl(taxonId) : `https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(sp.sci)}`;
   l.innerHTML = `<a class="card-link" href="${href}" target="_blank">See more observations ↗</a>`;
   if (isYours) p.closest('.card').classList.remove('gap');
